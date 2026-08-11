@@ -214,96 +214,130 @@
   </div>
 
   <script>
-    // URL de tu API en Render
-    const API_URL = "https://andmax-cotizador-api.onrender.com";
+  const API_URL = "https://andmax-cotizador-api.onrender.com";
 
-    // Mapa de espesores por material (en mm)
-    const ESPESORES_POR_MATERIAL = {
-      mdf: [3, 5, 9],
-      acrilico: [2, 3, 5],
-      cuero: [1.5, 3],
-      acero_carbono: [1, 2, 3],
-      acero_inoxidable: [1, 2, 3],
-      aluminio: [1, 2, 3]
-    };
+  const ESPESORES_POR_MATERIAL = {
+    mdf: [3, 5, 9],
+    acrilico: [2, 3, 5],
+    cuero: [1.5, 3],
+    acero_carbono: [1, 2, 3],
+    acero_inoxidable: [1, 2, 3],
+    aluminio: [1, 2, 3]
+  };
 
-    const dxfInput = document.getElementById('dxfInput');
-    const dropzone = document.getElementById('dropzone');
-    const materialSelect = document.getElementById('materialSelect');
-    const espesorSelect = document.getElementById('espesorSelect');
-    const btnPagar = document.getElementById('btnPagar');
+  const dxfInput = document.getElementById('dxfInput');
+  const dropzone = document.getElementById('dropzone');
+  const materialSelect = document.getElementById('materialSelect');
+  const espesorSelect = document.getElementById('espesorSelect');
+  const btnPagar = document.getElementById('btnPagar');
 
-    dropzone.addEventListener('click', () => dxfInput.click());
+  let ultimoResultado = null;
 
-    // Al cambiar material, actualizar las opciones del selector de espesores
-    materialSelect.addEventListener('change', () => {
-      const material = materialSelect.value;
-      espesorSelect.innerHTML = '';
+  dropzone.addEventListener('click', () => dxfInput.click());
 
-      if (!material || !ESPESORES_POR_MATERIAL[material]) {
-        espesorSelect.innerHTML = '<option value="">-- Primero seleccioná un material --</option>';
-        espesorSelect.disabled = true;
-      } else {
-        const opciones = ESPESORES_POR_MATERIAL[material];
-        opciones.forEach(esp => {
-          const opt = document.createElement('option');
-          opt.value = esp;
-          opt.textContent = `${esp} mm`;
-          espesorSelect.appendChild(opt);
-        });
-        espesorSelect.disabled = false;
-      }
-      procesarCotizacion();
-    });
+  materialSelect.addEventListener('change', () => {
+    const material = materialSelect.value;
+    espesorSelect.innerHTML = '';
 
-    dxfInput.addEventListener('change', procesarCotizacion);
-    espesorSelect.addEventListener('change', procesarCotizacion);
-
-    async function procesarCotizacion() {
-      const file = dxfInput.files[0];
-      const material = materialSelect.value;
-      const espesor = espesorSelect.value;
-
-      if (!file) return;
-
-      if (!material) {
-        document.getElementById('previewArea').innerText = "⚠️ Seleccioná un material para calcular el precio.";
-        return;
-      }
-
-      document.getElementById('previewArea').innerText = "⏳ Procesando archivo en el servidor...";
-
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('material', material);
-      formData.append('espesor', espesor || '3');
-      formData.append('incluye_material', 'true');
-
-      try {
-        const response = await fetch(`${API_URL}/cotizar`, {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!response.ok) throw new Error("Error en la cotización");
-
-        const data = await response.json();
-
-        document.getElementById('lblMetros').innerText = `${data.metros_corte} m`;
-        document.getElementById('lblPiercings').innerText = data.piercings;
-        document.getElementById('lblCostoCorte').innerText = `$ ${data.costo_mecanizado.toLocaleString('es-AR')}`;
-        document.getElementById('lblCostoMaterial').innerText = `$ ${data.costo_material.toLocaleString('es-AR')}`;
-        document.getElementById('lblSetup').innerText = `$ ${data.costo_setup.toLocaleString('es-AR')}`;
-        document.getElementById('lblTotal').innerText = `$ ${data.total_estimado.toLocaleString('es-AR')}`;
-        
-        document.getElementById('previewArea').innerText = `✅ Archivo cargado: ${data.archivo}`;
-        btnPagar.disabled = false;
-
-      } catch (error) {
-        document.getElementById('previewArea').innerText = "❌ Error al cotizar el archivo. Intentalo de nuevo.";
-        console.error(error);
-      }
+    if (!material || !ESPESORES_POR_MATERIAL[material]) {
+      espesorSelect.innerHTML = '<option value="">-- Primero seleccioná un material --</option>';
+      espesorSelect.disabled = true;
+    } else {
+      const opciones = ESPESORES_POR_MATERIAL[material];
+      opciones.forEach(esp => {
+        const opt = document.createElement('option');
+        opt.value = esp;
+        opt.textContent = `${esp} mm`;
+        espesorSelect.appendChild(opt);
+      });
+      espesorSelect.disabled = false;
     }
-  </script>
+    procesarCotizacion();
+  });
+
+  dxfInput.addEventListener('change', procesarCotizacion);
+  espesorSelect.addEventListener('change', procesarCotizacion);
+
+  async function procesarCotizacion() {
+    const file = dxfInput.files[0];
+    const material = materialSelect.value;
+    const espesor = espesorSelect.value;
+
+    if (!file) return;
+
+    if (!material) {
+      document.getElementById('previewArea').innerText = "⚠️ Seleccioná un material para calcular el precio.";
+      return;
+    }
+
+    document.getElementById('previewArea').innerText = "⏳ Procesando archivo en el servidor...";
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('material', material);
+    formData.append('espesor', espesor || '3');
+    formData.append('incluye_material', 'true');
+
+    try {
+      const response = await fetch(`${API_URL}/cotizar`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) throw new Error("Error en la cotización");
+
+      const data = await response.json();
+      ultimoResultado = data;
+
+      document.getElementById('lblMetros').innerText = `${data.metros_corte} m`;
+      document.getElementById('lblPiercings').innerText = data.piercings;
+      document.getElementById('lblCostoCorte').innerText = `$ ${data.costo_mecanizado.toLocaleString('es-AR')}`;
+      document.getElementById('lblCostoMaterial').innerText = `$ ${data.costo_material.toLocaleString('es-AR')}`;
+      document.getElementById('lblSetup').innerText = `$ ${data.costo_setup.toLocaleString('es-AR')}`;
+      document.getElementById('lblTotal').innerText = `$ ${data.total_estimado.toLocaleString('es-AR')}`;
+      
+      document.getElementById('previewArea').innerText = `✅ Archivo cargado: ${data.archivo}`;
+      btnPagar.disabled = false;
+
+    } catch (error) {
+      document.getElementById('previewArea').innerText = "❌ Error al cotizar el archivo. Intentalo de nuevo.";
+      console.error(error);
+    }
+  }
+
+  // EVENTO DE PAGO CON MERCADO PAGO
+  btnPagar.addEventListener('click', async () => {
+    if (!ultimoResultado) return;
+
+    btnPagar.disabled = true;
+    btnPagar.innerText = "⏳ Generando orden de pago...";
+
+    const formData = new FormData();
+    formData.append('titulo', ultimoResultado.archivo);
+    formData.append('monto', ultimoResultado.total_estimado);
+
+    try {
+      const response = await fetch(`${API_URL}/crear_pago`, {
+        method: 'POST',
+        body: formData
+      });
+
+      const resData = await response.json();
+
+      if (resData.init_point) {
+        // Redirigir al checkout de Mercado Pago
+        window.location.href = resData.init_point;
+      } else {
+        alert("Error al generar el link de pago.");
+        btnPagar.disabled = false;
+        btnPagar.innerText = "Continuar al Pago";
+      }
+    } catch (err) {
+      alert("Ocurrió un error conectando con la pasarela de pagos.");
+      btnPagar.disabled = false;
+      btnPagar.innerText = "Continuar al Pago";
+    }
+  });
+</script>
 </body>
 </html>
