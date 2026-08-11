@@ -1,413 +1,150 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ANDMAX LASER - Cotizador Online</title>
-  
-  <style>
-    :root {
-      --bg-dark: #121214;
-      --card-bg: #1e1e24;
-      --accent: #e63946;
-      --text-light: #f1f1f1;
-      --text-muted: #a0a0a0;
-      --border-color: #33333e;
-      --success: #2a9d8f;
-    }
-
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    }
-
-    body { 
-      background-color: var(--bg-dark); 
-      color: var(--text-light); 
-      padding: 20px; 
-    }
-
-    header { 
-      text-align: center; 
-      margin-bottom: 30px; 
-    }
-
-    header h1 { 
-      font-size: 2rem; 
-      color: var(--text-light); 
-    }
-
-    header p { 
-      color: var(--text-muted); 
-      font-size: 0.95rem; 
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 25px;
-    }
-
-    @media (max-width: 768px) {
-      .container { grid-template-columns: 1fr; }
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 24px;
-    }
-
-    h2 { 
-      font-size: 1.2rem; 
-      margin-bottom: 16px; 
-      border-bottom: 1px solid var(--border-color); 
-      padding-bottom: 8px; 
-    }
-
-    .upload-box {
-      border: 2px dashed var(--accent);
-      border-radius: 8px;
-      padding: 30px;
-      text-align: center;
-      cursor: pointer;
-      background: rgba(230, 57, 70, 0.05);
-      transition: all 0.3s ease;
-      margin-bottom: 20px;
-    }
-
-    .upload-box:hover { 
-      background: rgba(230, 57, 70, 0.12); 
-    }
-
-    .upload-box p { 
-      font-size: 0.9rem; 
-      color: var(--text-muted); 
-      margin-top: 8px; 
-    }
-
-    .form-group { margin-bottom: 18px; }
-
-    label { 
-      display: block; 
-      font-size: 0.88rem; 
-      margin-bottom: 6px; 
-      color: var(--text-muted); 
-    }
-
-    select {
-      width: 100%;
-      padding: 10px 12px;
-      background: #141418;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      color: var(--text-light);
-      font-size: 0.95rem;
-    }
-
-    .preview-box {
-      width: 100%;
-      height: 180px;
-      background: #141418;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-      padding: 10px;
-      text-align: center;
-    }
-
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      font-size: 0.9rem;
-    }
-
-    .total-row {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 2px solid var(--border-color);
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: var(--text-light);
-    }
-
-    .btn-pay {
-      width: 100%;
-      padding: 14px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.05rem;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 20px;
-      transition: background 0.2s ease;
-    }
-
-    .btn-pay:hover { background: #c72c38; }
-    .btn-pay:disabled { background: #555; cursor: not-allowed; }
-
-    .badge-delivery {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 6px 12px;
-      background: rgba(42, 157, 143, 0.15);
-      color: var(--success);
-      border-radius: 20px;
-      font-size: 0.8rem;
-    }
-
-    /* --- BOTÓN FLOTANTE DE WHATSAPP --- */
-    .btn-whatsapp {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #25d366;
-      color: #ffffff;
-      padding: 12px 20px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      z-index: 1000;
-      transition: transform 0.2s ease, background-color 0.2s ease;
-    }
-
-    .btn-whatsapp:hover {
-      background-color: #128c7e;
-      transform: scale(1.05);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Cotizador ANDMAX Laser</title>
 </head>
 <body>
 
-  <header>
-    <h1>ANDMAX LASER</h1>
-    <p>Cotizá tus trabajos de corte y grabado en segundos</p>
-  </header>
-
-  <div class="container">
+    <h2>Cotizador de Corte Láser</h2>
     
-    <!-- COLUMNA IZQUIERDA -->
-    <div class="card">
-      <h2>1. Cargar Archivo</h2>
-      <div class="upload-box" id="dropzone">
-        <strong>📂 Arrastrá tu archivo .DXF aquí</strong>
-        <p>O hacé clic para seleccionarlo (escala en mm)</p>
-        <input type="file" id="dxfInput" accept=".dxf" style="display: none;">
-      </div>
+    <form id="cotizadorForm">
+        <!-- Archivo DXF -->
+        <label for="file">Archivo DXF:</label><br>
+        <input type="file" id="file" name="file" accept=".dxf" required><br><br>
 
-      <h2>2. Configuración</h2>
-      <div class="form-group">
-        <label for="materialSelect">Material</label>
-        <select id="materialSelect">
-          <option value="">-- Seleccionar Material --</option>
-          <option value="mdf">MDF / Fibrofácil</option>
-          <option value="acrilico">Acrílico Metacrilato</option>
-          <option value="cuero">Cuero / Suela</option>
-          <option value="acero_carbono">Acero al Carbono (Hierro)</option>
-          <option value="acero_inoxidable">Acero Inoxidable</option>
-          <option value="aluminio">Aluminio</option>
-        </select>
-      </div>
+        <!-- Selección de Material -->
+        <label for="material">Material:</label><br>
+        <select id="material" name="material" required>
+            <option value="acero_carbono">Acero al Carbono / Hierro</option>
+            <option value="acero_inoxidable">Acero Inoxidable</option>
+            <option value="aluminio">Aluminio</option>
+            <option value="mdf">MDF / Madera</option>
+            <option value="acrilico">Acrílico</option>
+        </select><br><br>
 
-      <div class="form-group">
-        <label for="espesorSelect">Espesor</label>
-        <select id="espesorSelect" disabled>
-          <option value="">-- Primero seleccioná un material --</option>
-        </select>
-      </div>
-    </div>
+        <!-- Selección de Espesor -->
+        <label for="espesor">Espesor (mm):</label><br>
+        <select id="espesor" name="espesor" required>
+            <option value="1">1 mm</option>
+            <option value="2">2 mm</option>
+            <option value="3" selected>3 mm</option>
+            <option value="4">4 mm</option>
+            <option value="5">5 mm</option>
+            <option value="6">6 mm</option>
+            <option value="8">8 mm</option>
+            <option value="10">10 mm</option>
+            <option value="12">12 mm</option>
+        </select><br><br>
 
-    <!-- COLUMNA DERECHA -->
-    <div class="card">
-      <h2>3. Estado del Proyecto</h2>
-      <div class="preview-box" id="previewArea">
-        Subí un archivo .dxf y seleccioná un material para cotizar
-      </div>
+        <!-- Opción Incluye Material -->
+        <label>
+            <input type="checkbox" id="incluye_material" name="incluye_material" checked>
+            Incluir provisión de material
+        </label><br><br>
 
-      <h2>4. Presupuesto</h2>
-      <div class="summary-row">
-        <span>Metros de corte:</span>
-        <strong id="lblMetros">0.00 m</strong>
-      </div>
-      <div class="summary-row">
-        <span>Perforaciones (Piercings):</span>
-        <strong id="lblPiercings">0</strong>
-      </div>
-      <div class="summary-row">
-        <span>Costo Mecanizado / Corte:</span>
-        <span id="lblCostoCorte">$ 0.00</span>
-      </div>
-      <div class="summary-row">
-        <span>Costo Material:</span>
-        <span id="lblCostoMaterial">$ 0.00</span>
-      </div>
-      <div class="summary-row">
-        <span>Puesta a punto (Setup):</span>
-        <span id="lblSetup">$ 0.00</span>
-      </div>
+        <button type="submit" id="btnCotizar">Calcular Cotización</button>
+    </form>
 
-      <div class="total-row">
-        <span>TOTAL:</span>
-        <span id="lblTotal" style="color: var(--accent);">$ 0.00</span>
-      </div>
+    <hr>
 
-      <div style="text-align: center;">
-        <span class="badge-delivery">⏱️ Tiempo estimado: 48 - 72 hs hábiles</span>
-      </div>
-
-      <button class="btn-pay" id="btnPagar" disabled>Continuar al Pago</button>
-    </div>
-
-  </div>
-
-  <!-- BOTÓN FLOTANTE DE WHATSAPP -->
-  <a href="https://wa.me/5491173708775?text=Hola,%20tengo%20una%20consulta%20sobre%20mi%20cotizacion" class="btn-whatsapp" target="_blank" rel="noopener noreferrer">
-    💬 Contactar por WhatsApp
-  </a>
-
-  <script>
-    const API_URL = "https://andmax-cotizador-api.onrender.com";
-
-    const ESPESORES_POR_MATERIAL = {
-      
-      mdf: [1, 2, 3, 5, 6, 9, 12, 18],
-      acrilico: [1, 2, 3, 4, 5, 8, 10],
-      cuero: [1.5, 3],
-      acero_carbono: [1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12],
-      acero_inoxidable: [1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12],
-      aluminio: [1, 2, 3, 4, 5, 6, 8, 10]
-    
-    };
-
-    const dxfInput = document.getElementById('dxfInput');
-    const dropzone = document.getElementById('dropzone');
-    const materialSelect = document.getElementById('materialSelect');
-    const espesorSelect = document.getElementById('espesorSelect');
-    const btnPagar = document.getElementById('btnPagar');
-
-    let ultimoResultado = null;
-
-    dropzone.addEventListener('click', () => dxfInput.click());
-
-    materialSelect.addEventListener('change', () => {
-      const material = materialSelect.value;
-      espesorSelect.innerHTML = '';
-
-      if (!material || !ESPESORES_POR_MATERIAL[material]) {
-        espesorSelect.innerHTML = '<option value="">-- Primero seleccioná un material --</option>';
-        espesorSelect.disabled = true;
-      } else {
-        const opciones = ESPESORES_POR_MATERIAL[material];
-        opciones.forEach(esp => {
-          const opt = document.createElement('option');
-          opt.value = esp;
-          opt.textContent = `${esp} mm`;
-          espesorSelect.appendChild(opt);
-        });
-        espesorSelect.disabled = false;
-      }
-      procesarCotizacion();
-    });
-
-    dxfInput.addEventListener('change', procesarCotizacion);
-    espesorSelect.addEventListener('change', procesarCotizacion);
-
-    async function procesarCotizacion() {
-      const file = dxfInput.files[0];
-      const material = materialSelect.value;
-      const espesor = espesorSelect.value;
-
-      if (!file) return;
-
-      if (!material) {
-        document.getElementById('previewArea').innerText = "⚠️ Seleccioná un material para calcular el precio.";
-        return;
-      }
-
-      document.getElementById('previewArea').innerText = "⏳ Procesando archivo en el servidor...";
-
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('material', material);
-      formData.append('espesor', espesor || '3');
-      formData.append('incluye_material', 'true');
-
-      try {
-        const response = await fetch(`${API_URL}/cotizar`, {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!response.ok) throw new Error("Error en la cotización");
-
-        const data = await response.json();
-        ultimoResultado = data;
-
-        document.getElementById('lblMetros').innerText = `${data.metros_corte} m`;
-        document.getElementById('lblPiercings').innerText = data.piercings;
-        document.getElementById('lblCostoCorte').innerText = `$ ${data.costo_mecanizado.toLocaleString('es-AR')}`;
-        document.getElementById('lblCostoMaterial').innerText = `$ ${data.costo_material.toLocaleString('es-AR')}`;
-        document.getElementById('lblSetup').innerText = `$ ${data.costo_setup.toLocaleString('es-AR')}`;
-        document.getElementById('lblTotal').innerText = `$ ${data.total_estimado.toLocaleString('es-AR')}`;
+    <!-- Resultados -->
+    <div id="resultado" style="display:none;">
+        <h3>Resumen de Cotización</h3>
+        <p><strong>Metros de corte:</strong> <span id="resMetros"></span> m</p>
+        <p><strong>Piercings (Perforaciones):</strong> <span id="resPiercings"></span></p>
+        <p><strong>Precio/metro aplicado:</strong> $<span id="resPrecioMetro"></span></p>
+        <p><strong>Costo Mecanizado:</strong> $<span id="resMecanizado"></span></p>
+        <p><strong>Costo Material:</strong> $<span id="resCostoMaterial"></span></p>
+        <p><strong>Costo Setup:</strong> $<span id="resSetup"></span></p>
+        <h4><strong>TOTAL ESTIMADO: $<span id="resTotal"></span></strong></h4>
         
-        document.getElementById('previewArea').innerText = `✅ Archivo cargado: ${data.archivo}`;
-        btnPagar.disabled = false;
+        <button id="btnPagar">Pagar con Mercado Pago</button>
+    </div>
 
-      } catch (error) {
-        document.getElementById('previewArea').innerText = "❌ Error al cotizar el archivo. Intentalo de nuevo.";
-        console.error(error);
-      }
-    }
+    <script>
+        const API_URL = "https://andmax-cotizador-api.onrender.com";
+        let datosUltimaCotizacion = null;
 
-    // EVENTO DE PAGO CON MERCADO PAGO
-    btnPagar.addEventListener('click', async () => {
-      if (!ultimoResultado) return;
+        document.getElementById("cotizadorForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
 
-      btnPagar.disabled = true;
-      btnPagar.innerText = "⏳ Generando orden de pago...";
+            const fileInput = document.getElementById("file");
+            if (!fileInput.files[0]) {
+                alert("Por favor selecciona un archivo .DXF");
+                return;
+            }
 
-      const formData = new FormData();
-      formData.append('titulo', ultimoResultado.archivo);
-      formData.append('monto', ultimoResultado.total_estimado);
+            // Crear el objeto FormData con los nombres exactos que espera FastAPI
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+            formData.append("material", document.getElementById("material").value);
+            formData.append("espesor", document.getElementById("espesor").value);
+            formData.append("incluye_material", document.getElementById("incluye_material").checked);
 
-      try {
-        const response = await fetch(`${API_URL}/crear_pago`, {
-          method: 'POST',
-          body: formData
+            try {
+                document.getElementById("btnCotizar").innerText = "Procesando DXF...";
+                
+                const response = await fetch(`${API_URL}/cotizar`, {
+                    method: "POST",
+                    body: formData // No setear Header 'Content-Type', el navegador asigna multipart/form-data automáticamente
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.detail || "Error al cotizar el archivo");
+                }
+
+                const data = await response.json();
+                datosUltimaCotizacion = data;
+
+                // Renderizar los valores devueltos por el backend
+                document.getElementById("resMetros").innerText = data.metros_corte;
+                document.getElementById("resPiercings").innerText = data.piercings;
+                document.getElementById("resPrecioMetro").innerText = data.precio_metro_aplicado;
+                document.getElementById("resMecanizado").innerText = data.costo_mecanizado;
+                document.getElementById("resCostoMaterial").innerText = data.costo_material;
+                document.getElementById("resSetup").innerText = data.costo_setup;
+                document.getElementById("resTotal").innerText = data.total_estimado;
+
+                document.getElementById("resultado").style.display = "block";
+
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            } finally {
+                document.getElementById("btnCotizar").innerText = "Calcular Cotización";
+            }
         });
 
-        const resData = await response.json();
+        // Botón para generar el link de Mercado Pago
+        document.getElementById("btnPagar").addEventListener("click", async function() {
+            if (!datosUltimaCotizacion) return;
 
-        if (resData.init_point) {
-          // Redirigir al checkout de Mercado Pago
-          window.location.href = resData.init_point;
-        } else {
-          alert("Error al generar el link de pago.");
-          btnPagar.disabled = false;
-          btnPagar.innerText = "Continuar al Pago";
-        }
-      } catch (err) {
-        alert("Ocurrió un error conectando con la pasarela de pagos.");
-        btnPagar.disabled = false;
-        btnPagar.innerText = "Continuar al Pago";
-      }
-    });
-  </script>
+            const pagoData = new FormData();
+            pagoData.append("titulo", datosUltimaCotizacion.archivo);
+            pagoData.append("monto", datosUltimaCotizacion.total_estimado);
+            pagoData.append("material", datosUltimaCotizacion.material);
+            pagoData.append("espesor", datosUltimaCotizacion.espesor);
+            pagoData.append("metros", datosUltimaCotizacion.metros_corte);
+            pagoData.append("piercings", datosUltimaCotizacion.piercings);
+            pagoData.append("filepath", datosUltimaCotizacion.filepath);
+
+            try {
+                const response = await fetch(`${API_URL}/crear_pago`, {
+                    method: "POST",
+                    body: pagoData
+                });
+
+                const data = await response.json();
+                if (data.init_point) {
+                    window.location.href = data.init_point; // Redirige a Mercado Pago
+                } else {
+                    alert("No se pudo generar la preferencia de pago.");
+                }
+            } catch (err) {
+                alert("Error al conectar con la pasarela de pago.");
+            }
+        });
+    </script>
 </body>
 </html>
