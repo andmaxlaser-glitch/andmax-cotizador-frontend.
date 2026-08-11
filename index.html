@@ -1,242 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>//* --- BOTÓN FLOTANTE DE WHATSAPP --- */
-.btn-whatsapp {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #25d366;
-  color: #ffffff;
-  padding: 12px 20px;
-  border-radius: 50px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  z-index: 1000;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.btn-whatsapp:hover {
-  background-color: #128c7e;
-  transform: scale(1.05);
-}
-  <style
-}
-
-.btn-whatsapp:hover {
-  background-color: #128c7e;
-  transform: scale(1.05);
-}>
-/* --- RESET Y FUENTES --- */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-body {
-  background-color: #0f172a;
-  color: #f8fafc;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-  <!-- ... todo tu HTML anterior ... -->
-  <button id="btnPagar" ... >...</button>
-</div>
-
-<!-- Botón Flotante de WhatsApp -->
-<a href="https://wa.me/54911XXXXXXXX?text=Hola,%20tengo%20una%20consulta%20sobre%20mi%20cotizacion" class="btn-whatsapp" target="_blank" rel="noopener noreferrer">
-  💬 Contactar por WhatsApp
-</a>
-
-</body>
-}
-
-/* --- CONTENEDOR PRINCIPAL --- */
-.container {
-  width: 100%;
-  max-width: 520px;
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 16px;
-  padding: 28px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-}
-
-/* --- ENCABEZADO / BRANDING --- */
-.header {
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.header h1 {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.02em;
-}
-
-.header h1 span {
-  color: #f97316;
-}
-
-.header p {
-  color: #94a3b8;
-  font-size: 0.9rem;
-  margin-top: 4px;
-}
-
-/* --- DROPZONE / CARGA DE ARCHIVO --- */
-.dropzone {
-  border: 2px dashed #475569;
-  background-color: #0f172a;
-  border-radius: 12px;
-  padding: 24px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-bottom: 20px;
-}
-
-.dropzone:hover {
-  border-color: #f97316;
-  background-color: #1a2436;
-}
-
-.dropzone-icon {
-  font-size: 32px;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.dropzone-text {
-  color: #cbd5e1;
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-
-.dropzone-subtext {
-  color: #64748b;
-  font-size: 0.8rem;
-  margin-top: 4px;
-}
-
-/* --- FORMULARIO Y SELECTORES --- */
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #94a3b8;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-select {
-  width: 100%;
-  padding: 12px 14px;
-  background-color: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 8px;
-  color: #f8fafc;
-  font-size: 0.95rem;
-  outline: none;
-  transition: border-color 0.2s ease;
-}
-
-select:focus {
-  border-color: #f97316;
-}
-
-select:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* --- RESUMEN DE COTIZACIÓN --- */
-.cotizacion-card {
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 18px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.cotizacion-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  font-size: 0.9rem;
-  color: #cbd5e1;
-  border-bottom: 1px dashed #1e293b;
-}
-
-.cotizacion-row:last-child {
-  border-bottom: none;
-}
-
-.cotizacion-row.total {
-  border-top: 1px solid #334155;
-  margin-top: 8px;
-  padding-top: 12px;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.cotizacion-row.total .monto {
-  color: #f97316;
-}
-
-/* --- ÁREA DE NOTIFICACIONES --- */
-#previewArea {
-  font-size: 0.85rem;
-  color: #f97316;
-  text-align: center;
-  margin-bottom: 16px;
-  min-height: 20px;
-}
-
-/* --- BOTÓN PRINCIPAL DE PAGO --- */
-.btn-pagar {
-  width: 100%;
-  background-color: #f97316;
-  color: #ffffff;
-  border: none;
-  padding: 14px;
-  font-size: 1rem;
-  font-weight: 700;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
-}
-
-.btn-pagar:hover:not(:disabled) {
-  background-color: #ea580c;
-}
-
-.btn-pagar:active:not(:disabled) {
-  transform: scale(0.98);
-}
-
-.btn-pagar:disabled {
-  background-color: #475569;
-  color: #94a3b8;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-</style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANDMAX LASER - Cotizador Online</title>
+  
   <style>
     :root {
       --bg-dark: #121214;
@@ -248,12 +16,33 @@ select:disabled {
       --success: #2a9d8f;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg-dark); color: var(--text-light); padding: 20px; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    }
 
-    header { text-align: center; margin-bottom: 30px; }
-    header h1 { font-size: 2rem; color: var(--text-light); }
-    header p { color: var(--text-muted); font-size: 0.95rem; }
+    body { 
+      background-color: var(--bg-dark); 
+      color: var(--text-light); 
+      padding: 20px; 
+    }
+
+    header { 
+      text-align: center; 
+      margin-bottom: 30px; 
+    }
+
+    header h1 { 
+      font-size: 2rem; 
+      color: var(--text-light); 
+    }
+
+    header p { 
+      color: var(--text-muted); 
+      font-size: 0.95rem; 
+    }
 
     .container {
       max-width: 1100px;
@@ -274,7 +63,12 @@ select:disabled {
       padding: 24px;
     }
 
-    h2 { font-size: 1.2rem; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+    h2 { 
+      font-size: 1.2rem; 
+      margin-bottom: 16px; 
+      border-bottom: 1px solid var(--border-color); 
+      padding-bottom: 8px; 
+    }
 
     .upload-box {
       border: 2px dashed var(--accent);
@@ -287,11 +81,25 @@ select:disabled {
       margin-bottom: 20px;
     }
 
-    .upload-box:hover { background: rgba(230, 57, 70, 0.12); }
-    .upload-box p { font-size: 0.9rem; color: var(--text-muted); margin-top: 8px; }
+    .upload-box:hover { 
+      background: rgba(230, 57, 70, 0.12); 
+    }
+
+    .upload-box p { 
+      font-size: 0.9rem; 
+      color: var(--text-muted); 
+      margin-top: 8px; 
+    }
 
     .form-group { margin-bottom: 18px; }
-    label { display: block; font-size: 0.88rem; margin-bottom: 6px; color: var(--text-muted); }
+
+    label { 
+      display: block; 
+      font-size: 0.88rem; 
+      margin-bottom: 6px; 
+      color: var(--text-muted); 
+    }
+
     select {
       width: 100%;
       padding: 10px 12px;
@@ -361,27 +169,29 @@ select:disabled {
       border-radius: 20px;
       font-size: 0.8rem;
     }
-  </style>
-  .btn-whatsapp {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #25d366;
-  color: #ffffff;
-  padding: 12px 20px;
-  border-radius: 50px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  z-index: 1000;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
 
-.btn-whatsapp:hover {
-  background-color: #128c7e;
-  transform: scale(1.05);
-}
+    /* --- BOTÓN FLOTANTE DE WHATSAPP --- */
+    .btn-whatsapp {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25d366;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .btn-whatsapp:hover {
+      background-color: #128c7e;
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 <body>
 
@@ -466,131 +276,136 @@ select:disabled {
 
   </div>
 
+  <!-- BOTÓN FLOTANTE DE WHATSAPP -->
+  <a href="https://wa.me/5491100000000?text=Hola,%20tengo%20una%20consulta%20sobre%20mi%20cotizacion" class="btn-whatsapp" target="_blank" rel="noopener noreferrer">
+    💬 Contactar por WhatsApp
+  </a>
+
   <script>
-  const API_URL = "https://andmax-cotizador-api.onrender.com";
+    const API_URL = "https://andmax-cotizador-api.onrender.com";
 
-  const ESPESORES_POR_MATERIAL = {
-    mdf: [3, 5, 9],
-    acrilico: [2, 3, 5],
-    cuero: [1.5, 3],
-    acero_carbono: [1, 2, 3],
-    acero_inoxidable: [1, 2, 3],
-    aluminio: [1, 2, 3]
-  };
+    const ESPESORES_POR_MATERIAL = {
+      mdf: [3, 5, 9],
+      acrilico: [2, 3, 5],
+      cuero: [1.5, 3],
+      acero_carbono: [1, 2, 3],
+      acero_inoxidable: [1, 2, 3],
+      aluminio: [1, 2, 3]
+    };
 
-  const dxfInput = document.getElementById('dxfInput');
-  const dropzone = document.getElementById('dropzone');
-  const materialSelect = document.getElementById('materialSelect');
-  const espesorSelect = document.getElementById('espesorSelect');
-  const btnPagar = document.getElementById('btnPagar');
+    const dxfInput = document.getElementById('dxfInput');
+    const dropzone = document.getElementById('dropzone');
+    const materialSelect = document.getElementById('materialSelect');
+    const espesorSelect = document.getElementById('espesorSelect');
+    const btnPagar = document.getElementById('btnPagar');
 
-  let ultimoResultado = null;
+    let ultimoResultado = null;
 
-  dropzone.addEventListener('click', () => dxfInput.click());
+    dropzone.addEventListener('click', () => dxfInput.click());
 
-  materialSelect.addEventListener('change', () => {
-    const material = materialSelect.value;
-    espesorSelect.innerHTML = '';
+    materialSelect.addEventListener('change', () => {
+      const material = materialSelect.value;
+      espesorSelect.innerHTML = '';
 
-    if (!material || !ESPESORES_POR_MATERIAL[material]) {
-      espesorSelect.innerHTML = '<option value="">-- Primero seleccioná un material --</option>';
-      espesorSelect.disabled = true;
-    } else {
-      const opciones = ESPESORES_POR_MATERIAL[material];
-      opciones.forEach(esp => {
-        const opt = document.createElement('option');
-        opt.value = esp;
-        opt.textContent = `${esp} mm`;
-        espesorSelect.appendChild(opt);
-      });
-      espesorSelect.disabled = false;
-    }
-    procesarCotizacion();
-  });
-
-  dxfInput.addEventListener('change', procesarCotizacion);
-  espesorSelect.addEventListener('change', procesarCotizacion);
-
-  async function procesarCotizacion() {
-    const file = dxfInput.files[0];
-    const material = materialSelect.value;
-    const espesor = espesorSelect.value;
-
-    if (!file) return;
-
-    if (!material) {
-      document.getElementById('previewArea').innerText = "⚠️ Seleccioná un material para calcular el precio.";
-      return;
-    }
-
-    document.getElementById('previewArea').innerText = "⏳ Procesando archivo en el servidor...";
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('material', material);
-    formData.append('espesor', espesor || '3');
-    formData.append('incluye_material', 'true');
-
-    try {
-      const response = await fetch(`${API_URL}/cotizar`, {
-        method: 'POST',
-        body: formData
-      });
-
-      if (!response.ok) throw new Error("Error en la cotización");
-
-      const data = await response.json();
-      ultimoResultado = data;
-
-      document.getElementById('lblMetros').innerText = `${data.metros_corte} m`;
-      document.getElementById('lblPiercings').innerText = data.piercings;
-      document.getElementById('lblCostoCorte').innerText = `$ ${data.costo_mecanizado.toLocaleString('es-AR')}`;
-      document.getElementById('lblCostoMaterial').innerText = `$ ${data.costo_material.toLocaleString('es-AR')}`;
-      document.getElementById('lblSetup').innerText = `$ ${data.costo_setup.toLocaleString('es-AR')}`;
-      document.getElementById('lblTotal').innerText = `$ ${data.total_estimado.toLocaleString('es-AR')}`;
-      
-      document.getElementById('previewArea').innerText = `✅ Archivo cargado: ${data.archivo}`;
-      btnPagar.disabled = false;
-
-    } catch (error) {
-      document.getElementById('previewArea').innerText = "❌ Error al cotizar el archivo. Intentalo de nuevo.";
-      console.error(error);
-    }
-  }
-
-  // EVENTO DE PAGO CON MERCADO PAGO
-  btnPagar.addEventListener('click', async () => {
-    if (!ultimoResultado) return;
-
-    btnPagar.disabled = true;
-    btnPagar.innerText = "⏳ Generando orden de pago...";
-
-    const formData = new FormData();
-    formData.append('titulo', ultimoResultado.archivo);
-    formData.append('monto', ultimoResultado.total_estimado);
-
-    try {
-      const response = await fetch(`${API_URL}/crear_pago`, {
-        method: 'POST',
-        body: formData
-      });
-
-      const resData = await response.json();
-
-      if (resData.init_point) {
-        // Redirigir al checkout de Mercado Pago
-        window.location.href = resData.init_point;
+      if (!material || !ESPESORES_POR_MATERIAL[material]) {
+        espesorSelect.innerHTML = '<option value="">-- Primero seleccioná un material --</option>';
+        espesorSelect.disabled = true;
       } else {
-        alert("Error al generar el link de pago.");
+        const opciones = ESPESORES_POR_MATERIAL[material];
+        opciones.forEach(esp => {
+          const opt = document.createElement('option');
+          opt.value = esp;
+          opt.textContent = `${esp} mm`;
+          espesorSelect.appendChild(opt);
+        });
+        espesorSelect.disabled = false;
+      }
+      procesarCotizacion();
+    });
+
+    dxfInput.addEventListener('change', procesarCotizacion);
+    espesorSelect.addEventListener('change', procesarCotizacion);
+
+    async function procesarCotizacion() {
+      const file = dxfInput.files[0];
+      const material = materialSelect.value;
+      const espesor = espesorSelect.value;
+
+      if (!file) return;
+
+      if (!material) {
+        document.getElementById('previewArea').innerText = "⚠️ Seleccioná un material para calcular el precio.";
+        return;
+      }
+
+      document.getElementById('previewArea').innerText = "⏳ Procesando archivo en el servidor...";
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('material', material);
+      formData.append('espesor', espesor || '3');
+      formData.append('incluye_material', 'true');
+
+      try {
+        const response = await fetch(`${API_URL}/cotizar`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) throw new Error("Error en la cotización");
+
+        const data = await response.json();
+        ultimoResultado = data;
+
+        document.getElementById('lblMetros').innerText = `${data.metros_corte} m`;
+        document.getElementById('lblPiercings').innerText = data.piercings;
+        document.getElementById('lblCostoCorte').innerText = `$ ${data.costo_mecanizado.toLocaleString('es-AR')}`;
+        document.getElementById('lblCostoMaterial').innerText = `$ ${data.costo_material.toLocaleString('es-AR')}`;
+        document.getElementById('lblSetup').innerText = `$ ${data.costo_setup.toLocaleString('es-AR')}`;
+        document.getElementById('lblTotal').innerText = `$ ${data.total_estimado.toLocaleString('es-AR')}`;
+        
+        document.getElementById('previewArea').innerText = `✅ Archivo cargado: ${data.archivo}`;
+        btnPagar.disabled = false;
+
+      } catch (error) {
+        document.getElementById('previewArea').innerText = "❌ Error al cotizar el archivo. Intentalo de nuevo.";
+        console.error(error);
+      }
+    }
+
+    // EVENTO DE PAGO CON MERCADO PAGO
+    btnPagar.addEventListener('click', async () => {
+      if (!ultimoResultado) return;
+
+      btnPagar.disabled = true;
+      btnPagar.innerText = "⏳ Generando orden de pago...";
+
+      const formData = new FormData();
+      formData.append('titulo', ultimoResultado.archivo);
+      formData.append('monto', ultimoResultado.total_estimado);
+
+      try {
+        const response = await fetch(`${API_URL}/crear_pago`, {
+          method: 'POST',
+          body: formData
+        });
+
+        const resData = await response.json();
+
+        if (resData.init_point) {
+          // Redirigir al checkout de Mercado Pago
+          window.location.href = resData.init_point;
+        } else {
+          alert("Error al generar el link de pago.");
+          btnPagar.disabled = false;
+          btnPagar.innerText = "Continuar al Pago";
+        }
+      } catch (err) {
+        alert("Ocurrió un error conectando con la pasarela de pagos.");
         btnPagar.disabled = false;
         btnPagar.innerText = "Continuar al Pago";
       }
-    } catch (err) {
-      alert("Ocurrió un error conectando con la pasarela de pagos.");
-      btnPagar.disabled = false;
-      btnPagar.innerText = "Continuar al Pago";
-    }
-  });
-</script>
+    });
+  </script>
 </body>
 </html>
