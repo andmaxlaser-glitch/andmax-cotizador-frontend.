@@ -339,7 +339,59 @@
         });
         espesorSelect.disabled = false;
       }
-      procesarCotizacion();
+      procesarCotizacion();async function procesarCotizacion() {
+  const file = dxfInput.files[0];
+  const material = materialSelect.value;
+  const espesor = espesorSelect.value;
+
+  if (!file) return;
+
+  if (!material) {
+    document.getElementById('previewArea').innerHTML = "<p style='color:var(--text-muted);'>⚠️ Seleccioná un material para calcular el precio.</p>";
+    return;
+  }
+
+  document.getElementById('previewArea').innerHTML = "<p style='color:var(--text-muted);'>⏳ Generando vista previa del vector...</p>";
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('material', material);
+  formData.append('espesor', espesor || '3');
+  formData.append('incluye_material', 'true');
+
+  try {
+    const response = await fetch(`${API_URL}/cotizar`, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) throw new Error("Error en la cotización");
+
+    const data = await response.json();
+    ultimoResultado = data;
+
+    // Actualizar campos de valores
+    document.getElementById('lblMetros').innerText = `${data.metros_corte} m`;
+    document.getElementById('lblPiercings').innerText = data.piercings;
+    document.getElementById('lblCostoCorte').innerText = `$ ${data.costo_mecanizado.toLocaleString('es-AR')}`;
+    document.getElementById('lblCostoMaterial').innerText = `$ ${data.costo_material.toLocaleString('es-AR')}`;
+    document.getElementById('lblSetup').innerText = `$ ${data.costo_setup.toLocaleString('es-AR')}`;
+    document.getElementById('lblTotal').innerText = `$ ${data.total_estimado.toLocaleString('es-AR')}`;
+    
+    // Inyectar el dibujo SVG interactivo en el recuadro de previsualización
+    if (data.svg_preview) {
+      document.getElementById('previewArea').innerHTML = data.svg_preview;
+    } else {
+      document.getElementById('previewArea').innerText = `✅ Archivo cargado: ${data.archivo}`;
+    }
+
+    btnPagar.disabled = false;
+
+  } catch (error) {
+    document.getElementById('previewArea').innerHTML = "<p style='color:#e63946;'>❌ Error al procesar el archivo CAD. Verificá que sea un formato DXF válido.</p>";
+    console.error(error);
+  }
+}
     });
 
     dxfInput.addEventListener('change', procesarCotizacion);
