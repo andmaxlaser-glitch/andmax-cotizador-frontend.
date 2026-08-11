@@ -81,8 +81,9 @@
       margin-bottom: 20px;
     }
 
-    .upload-box:hover { 
-      background: rgba(230, 57, 70, 0.12); 
+    .upload-box:hover, .upload-box.dragover { 
+      background: rgba(230, 57, 70, 0.18); 
+      border-color: #ff4d5a;
     }
 
     .upload-box p { 
@@ -170,7 +171,6 @@
       font-size: 0.8rem;
     }
 
-    /* --- BOTÓN FLOTANTE DE WHATSAPP --- */
     .btn-whatsapp {
       position: fixed;
       bottom: 20px;
@@ -285,14 +285,12 @@
     const API_URL = "https://andmax-cotizador-api.onrender.com";
 
     const ESPESORES_POR_MATERIAL = {
-      
-      mdf: [1, 2, 3, 5, 6, 9, 12, 18],
+      mdf: [1, 2, 3, 5, 6, 8, 10],
       acrilico: [1, 2, 3, 4, 5, 8, 10],
       cuero: [1.5, 3],
       acero_carbono: [1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12],
       acero_inoxidable: [1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12],
       aluminio: [1, 2, 3, 4, 5, 6, 8, 10]
-    
     };
 
     const dxfInput = document.getElementById('dxfInput');
@@ -303,7 +301,26 @@
 
     let ultimoResultado = null;
 
+    // --- MANEJO DE EVENTOS DE CARGA Y DRAG & DROP ---
     dropzone.addEventListener('click', () => dxfInput.click());
+
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('dragover');
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) {
+        dxfInput.files = e.dataTransfer.files;
+        procesarCotizacion();
+      }
+    });
 
     materialSelect.addEventListener('change', () => {
       const material = materialSelect.value;
@@ -375,7 +392,7 @@
       }
     }
 
-    // EVENTO DE PAGO CON MERCADO PAGO
+    // --- EVENTO DE PAGO CON MERCADO PAGO ---
     btnPagar.addEventListener('click', async () => {
       if (!ultimoResultado) return;
 
@@ -385,6 +402,11 @@
       const formData = new FormData();
       formData.append('titulo', ultimoResultado.archivo);
       formData.append('monto', ultimoResultado.total_estimado);
+      formData.append('material', ultimoResultado.material);
+      formData.append('espesor', ultimoResultado.espesor);
+      formData.append('metros', ultimoResultado.metros_corte);
+      formData.append('piercings', ultimoResultado.piercings);
+      formData.append('filepath', ultimoResultado.filepath);
 
       try {
         const response = await fetch(`${API_URL}/crear_pago`, {
@@ -395,7 +417,6 @@
         const resData = await response.json();
 
         if (resData.init_point) {
-          // Redirigir al checkout de Mercado Pago
           window.location.href = resData.init_point;
         } else {
           alert("Error al generar el link de pago.");
