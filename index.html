@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ANDMAX LASER - Cotizador Online</title>
-  
+
   <style>
     :root {
       --bg-dark: #121214;
@@ -16,32 +16,32 @@
       --success: #2a9d8f;
     }
 
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    body { 
-      background-color: var(--bg-dark); 
-      color: var(--text-light); 
-      padding: 20px; 
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      padding: 20px;
     }
 
-    header { 
-      text-align: center; 
-      margin-bottom: 30px; 
+    header {
+      text-align: center;
+      margin-bottom: 30px;
     }
 
-    header h1 { 
-      font-size: 2rem; 
-      color: var(--text-light); 
+    header h1 {
+      font-size: 2rem;
+      color: var(--text-light);
     }
 
-    header p { 
-      color: var(--text-muted); 
-      font-size: 0.95rem; 
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
     }
 
     .container {
@@ -63,11 +63,11 @@
       padding: 24px;
     }
 
-    h2 { 
-      font-size: 1.2rem; 
-      margin-bottom: 16px; 
-      border-bottom: 1px solid var(--border-color); 
-      padding-bottom: 8px; 
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
     }
 
     .upload-box {
@@ -81,24 +81,24 @@
       margin-bottom: 20px;
     }
 
-    .upload-box:hover, .upload-box.dragover { 
-      background: rgba(230, 57, 70, 0.18); 
+    .upload-box:hover, .upload-box.dragover {
+      background: rgba(230, 57, 70, 0.18);
       border-color: #ff4d5a;
     }
 
-    .upload-box p { 
-      font-size: 0.9rem; 
-      color: var(--text-muted); 
-      margin-top: 8px; 
+    .upload-box p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 8px;
     }
 
     .form-group { margin-bottom: 18px; }
 
-    label { 
-      display: block; 
-      font-size: 0.88rem; 
-      margin-bottom: 6px; 
-      color: var(--text-muted); 
+    label {
+      display: block;
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+      color: var(--text-muted);
     }
 
     select {
@@ -171,6 +171,8 @@
       font-size: 0.8rem;
     }
 
+    .error-text { color: var(--accent); }
+
     .btn-whatsapp {
       position: fixed;
       bottom: 20px;
@@ -201,7 +203,7 @@
   </header>
 
   <div class="container">
-    
+
     <!-- COLUMNA IZQUIERDA -->
     <div class="card">
       <h2>1. Cargar Archivo</h2>
@@ -297,11 +299,14 @@
     const dropzone = document.getElementById('dropzone');
     const materialSelect = document.getElementById('materialSelect');
     const espesorSelect = document.getElementById('espesorSelect');
+    const previewArea = document.getElementById('previewArea');
     const btnPagar = document.getElementById('btnPagar');
 
-    let ultimoResultado = null;
+    // Guardamos acá el último resultado de /cotizar, incluido el quote_id
+    // que el backend necesita para crear el pago con el precio correcto.
+    let ultimaCotizacion = null;
 
-    // --- MANEJO DE EVENTOS DE CARGA Y DRAG & DROP ---
+    // --- DRAG & DROP ---
     dropzone.addEventListener('click', () => dxfInput.click());
 
     dropzone.addEventListener('dragover', (e) => {
@@ -339,59 +344,7 @@
         });
         espesorSelect.disabled = false;
       }
-      procesarCotizacion();async function procesarCotizacion() {
-  const file = dxfInput.files[0];
-  const material = materialSelect.value;
-  const espesor = espesorSelect.value;
-
-  if (!file) return;
-
-  if (!material) {
-    document.getElementById('previewArea').innerHTML = "<p style='color:var(--text-muted);'>⚠️ Seleccioná un material para calcular el precio.</p>";
-    return;
-  }
-
-  document.getElementById('previewArea').innerHTML = "<p style='color:var(--text-muted);'>⏳ Generando vista previa del vector...</p>";
-
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('material', material);
-  formData.append('espesor', espesor || '3');
-  formData.append('incluye_material', 'true');
-
-  try {
-    const response = await fetch(`${API_URL}/cotizar`, {
-      method: 'POST',
-      body: formData
-    });
-
-    if (!response.ok) throw new Error("Error en la cotización");
-
-    const data = await response.json();
-    ultimoResultado = data;
-
-    // Actualizar campos de valores
-    document.getElementById('lblMetros').innerText = `${data.metros_corte} m`;
-    document.getElementById('lblPiercings').innerText = data.piercings;
-    document.getElementById('lblCostoCorte').innerText = `$ ${data.costo_mecanizado.toLocaleString('es-AR')}`;
-    document.getElementById('lblCostoMaterial').innerText = `$ ${data.costo_material.toLocaleString('es-AR')}`;
-    document.getElementById('lblSetup').innerText = `$ ${data.costo_setup.toLocaleString('es-AR')}`;
-    document.getElementById('lblTotal').innerText = `$ ${data.total_estimado.toLocaleString('es-AR')}`;
-    
-    // Inyectar el dibujo SVG interactivo en el recuadro de previsualización
-    if (data.svg_preview) {
-      document.getElementById('previewArea').innerHTML = data.svg_preview;
-    } else {
-      document.getElementById('previewArea').innerText = `✅ Archivo cargado: ${data.archivo}`;
-    }
-
-    btnPagar.disabled = false;
-
-  } catch (error) {
-    document.getElementById('previewArea').innerHTML = "<p style='color:#e63946;'>❌ Error al procesar el archivo CAD. Verificá que sea un formato DXF válido.</p>";
-    console.error(error);
-  }
-}
+      procesarCotizacion();
     });
 
     dxfInput.addEventListener('change', procesarCotizacion);
@@ -405,11 +358,13 @@
       if (!file) return;
 
       if (!material) {
-        document.getElementById('previewArea').innerText = "⚠️ Seleccioná un material para calcular el precio.";
+        previewArea.innerHTML = "<p class='error-text'>⚠️ Seleccioná un material para calcular el precio.</p>";
         return;
       }
 
-      document.getElementById('previewArea').innerText = "⏳ Procesando archivo en el servidor...";
+      btnPagar.disabled = true;
+      ultimaCotizacion = null;
+      previewArea.innerHTML = "<p>⏳ Generando vista previa del vector...</p>";
 
       const formData = new FormData();
       formData.append('file', file);
@@ -423,10 +378,13 @@
           body: formData
         });
 
-        if (!response.ok) throw new Error("Error en la cotización");
-
         const data = await response.json();
-        ultimoResultado = data;
+
+        if (!response.ok) {
+          throw new Error(data.detail || 'Error en la cotización');
+        }
+
+        ultimaCotizacion = data;
 
         document.getElementById('lblMetros').innerText = `${data.metros_corte} m`;
         document.getElementById('lblPiercings').innerText = data.piercings;
@@ -434,31 +392,33 @@
         document.getElementById('lblCostoMaterial').innerText = `$ ${data.costo_material.toLocaleString('es-AR')}`;
         document.getElementById('lblSetup').innerText = `$ ${data.costo_setup.toLocaleString('es-AR')}`;
         document.getElementById('lblTotal').innerText = `$ ${data.total_estimado.toLocaleString('es-AR')}`;
-        
-        document.getElementById('previewArea').innerText = `✅ Archivo cargado: ${data.archivo}`;
+
+        // Vista previa vectorial del DXF que devuelve el backend
+        if (data.svg_preview) {
+          previewArea.innerHTML = data.svg_preview;
+        } else {
+          previewArea.innerText = `✅ Archivo cargado: ${data.archivo}`;
+        }
+
         btnPagar.disabled = false;
 
       } catch (error) {
-        document.getElementById('previewArea').innerText = "❌ Error al cotizar el archivo. Intentalo de nuevo.";
+        previewArea.innerHTML = `<p class="error-text">❌ ${error.message || 'Error al procesar el archivo. Verificá que sea un DXF válido.'}</p>`;
         console.error(error);
       }
     }
 
-    // --- EVENTO DE PAGO CON MERCADO PAGO ---
+    // --- PAGO CON MERCADO PAGO ---
+    // El backend recalcula el precio a partir del quote_id, así que acá
+    // solo mandamos ese id: nunca el monto ni los datos del material.
     btnPagar.addEventListener('click', async () => {
-      if (!ultimoResultado) return;
+      if (!ultimaCotizacion || !ultimaCotizacion.quote_id) return;
 
       btnPagar.disabled = true;
       btnPagar.innerText = "⏳ Generando orden de pago...";
 
       const formData = new FormData();
-      formData.append('titulo', ultimoResultado.archivo);
-      formData.append('monto', ultimoResultado.total_estimado);
-      formData.append('material', ultimoResultado.material);
-      formData.append('espesor', ultimoResultado.espesor);
-      formData.append('metros', ultimoResultado.metros_corte);
-      formData.append('piercings', ultimoResultado.piercings);
-      formData.append('filepath', ultimoResultado.filepath);
+      formData.append('quote_id', ultimaCotizacion.quote_id);
 
       try {
         const response = await fetch(`${API_URL}/crear_pago`, {
@@ -468,10 +428,10 @@
 
         const resData = await response.json();
 
-        if (resData.init_point) {
+        if (response.ok && resData.init_point) {
           window.location.href = resData.init_point;
         } else {
-          alert("Error al generar el link de pago.");
+          alert(resData.detail || "Error al generar el link de pago.");
           btnPagar.disabled = false;
           btnPagar.innerText = "Continuar al Pago";
         }
