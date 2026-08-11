@@ -59,7 +59,7 @@
 
     .form-group { margin-bottom: 18px; }
     label { display: block; font-size: 0.88rem; margin-bottom: 6px; color: var(--text-muted); }
-    select, input[type="number"] {
+    select {
       width: 100%;
       padding: 10px 12px;
       background: #141418;
@@ -161,6 +161,13 @@
           <option value="aluminio">Aluminio</option>
         </select>
       </div>
+
+      <div class="form-group">
+        <label for="espesorSelect">Espesor</label>
+        <select id="espesorSelect" disabled>
+          <option value="">-- Primero seleccioná un material --</option>
+        </select>
+      </div>
     </div>
 
     <!-- COLUMNA DERECHA -->
@@ -182,6 +189,10 @@
       <div class="summary-row">
         <span>Costo Mecanizado / Corte:</span>
         <span id="lblCostoCorte">$ 0.00</span>
+      </div>
+      <div class="summary-row">
+        <span>Costo Material:</span>
+        <span id="lblCostoMaterial">$ 0.00</span>
       </div>
       <div class="summary-row">
         <span>Puesta a punto (Setup):</span>
@@ -206,19 +217,52 @@
     // URL de tu API en Render
     const API_URL = "https://andmax-cotizador-api.onrender.com";
 
+    // Mapa de espesores por material (en mm)
+    const ESPESORES_POR_MATERIAL = {
+      mdf: [3, 5, 9],
+      acrilico: [2, 3, 5],
+      cuero: [1.5, 3],
+      acero_carbono: [1, 2, 3],
+      acero_inoxidable: [1, 2, 3],
+      aluminio: [1, 2, 3]
+    };
+
     const dxfInput = document.getElementById('dxfInput');
     const dropzone = document.getElementById('dropzone');
     const materialSelect = document.getElementById('materialSelect');
+    const espesorSelect = document.getElementById('espesorSelect');
     const btnPagar = document.getElementById('btnPagar');
 
     dropzone.addEventListener('click', () => dxfInput.click());
 
+    // Al cambiar material, actualizar las opciones del selector de espesores
+    materialSelect.addEventListener('change', () => {
+      const material = materialSelect.value;
+      espesorSelect.innerHTML = '';
+
+      if (!material || !ESPESORES_POR_MATERIAL[material]) {
+        espesorSelect.innerHTML = '<option value="">-- Primero seleccioná un material --</option>';
+        espesorSelect.disabled = true;
+      } else {
+        const opciones = ESPESORES_POR_MATERIAL[material];
+        opciones.forEach(esp => {
+          const opt = document.createElement('option');
+          opt.value = esp;
+          opt.textContent = `${esp} mm`;
+          espesorSelect.appendChild(opt);
+        });
+        espesorSelect.disabled = false;
+      }
+      procesarCotizacion();
+    });
+
     dxfInput.addEventListener('change', procesarCotizacion);
-    materialSelect.addEventListener('change', procesarCotizacion);
+    espesorSelect.addEventListener('change', procesarCotizacion);
 
     async function procesarCotizacion() {
       const file = dxfInput.files[0];
       const material = materialSelect.value;
+      const espesor = espesorSelect.value;
 
       if (!file) return;
 
@@ -229,11 +273,11 @@
 
       document.getElementById('previewArea').innerText = "⏳ Procesando archivo en el servidor...";
 
-    const formData = new FormData();
-formData.append('file', file);
-formData.append('material', material);
-formData.append('espesor', '3'); // Enviado como texto/string
-formData.append('incluye_material', 'true');
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('material', material);
+      formData.append('espesor', espesor || '3');
+      formData.append('incluye_material', 'true');
 
       try {
         const response = await fetch(`${API_URL}/cotizar`, {
@@ -247,7 +291,8 @@ formData.append('incluye_material', 'true');
 
         document.getElementById('lblMetros').innerText = `${data.metros_corte} m`;
         document.getElementById('lblPiercings').innerText = data.piercings;
-        document.getElementById('lblCostoCorte').innerText = `$ ${data.costo_corte.toLocaleString('es-AR')}`;
+        document.getElementById('lblCostoCorte').innerText = `$ ${data.costo_mecanizado.toLocaleString('es-AR')}`;
+        document.getElementById('lblCostoMaterial').innerText = `$ ${data.costo_material.toLocaleString('es-AR')}`;
         document.getElementById('lblSetup').innerText = `$ ${data.costo_setup.toLocaleString('es-AR')}`;
         document.getElementById('lblTotal').innerText = `$ ${data.total_estimado.toLocaleString('es-AR')}`;
         
