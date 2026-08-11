@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cotizador Online | Andmax Laser</title>
+  <style>
+    :root {
+      --bg-dark: #121214;
+      --card-bg: #1e1e24;
+      --accent: #e63946;
+      --text-light: #f1f1f1;
+      --text-muted: #a0a0a0;
+      --border-color: #33333e;
+      --success: #2a9d8f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg-dark); color: var(--text-light); padding: 20px; }
+
+    header { text-align: center; margin-bottom: 30px; }
+    header h1 { font-size: 2rem; color: var(--text-light); }
+    header p { color: var(--text-muted); font-size: 0.95rem; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    @media (max-width: 768px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    h2 { font-size: 1.2rem; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+
+    .upload-box {
+      border: 2px dashed var(--accent);
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(230, 57, 70, 0.05);
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .upload-box:hover { background: rgba(230, 57, 70, 0.12); }
+    .upload-box p { font-size: 0.9rem; color: var(--text-muted); margin-top: 8px; }
+
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-size: 0.88rem; margin-bottom: 6px; color: var(--text-muted); }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      background: #141418;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .preview-box {
+      width: 100%;
+      height: 180px;
+      background: #141418;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 2px solid var(--border-color);
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--text-light);
+    }
+
+    .btn-pay {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.2s ease;
+    }
+
+    .btn-pay:hover { background: #c72c38; }
+    .btn-pay:disabled { background: #555; cursor: not-allowed; }
+
+    .badge-delivery {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 6px 12px;
+      background: rgba(42, 157, 143, 0.15);
+      color: var(--success);
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ANDMAX LASER</h1>
+    <p>Cotizá tus trabajos de corte y grabado en segundos</p>
+  </header>
+
+  <div class="container">
+    
+    <!-- COLUMNA IZQUIERDA -->
+    <div class="card">
+      <h2>1. Cargar Archivo</h2>
+      <div class="upload-box" id="dropzone">
+        <strong>📂 Arrastrá tu archivo .DXF aquí</strong>
+        <p>O hacé clic para seleccionarlo (escala en mm)</p>
+        <input type="file" id="dxfInput" accept=".dxf" style="display: none;">
+      </div>
+
+      <h2>2. Configuración</h2>
+      <div class="form-group">
+        <label for="materialSelect">Material</label>
+        <select id="materialSelect">
+          <option value="">-- Seleccionar Material --</option>
+          <option value="mdf">MDF / Fibrofácil</option>
+          <option value="acrilico">Acrílico Metacrilato</option>
+          <option value="cuero">Cuero / Suela</option>
+          <option value="acero_carbono">Acero al Carbono (Hierro)</option>
+          <option value="acero_inoxidable">Acero Inoxidable</option>
+          <option value="aluminio">Aluminio</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA -->
+    <div class="card">
+      <h2>3. Estado del Proyecto</h2>
+      <div class="preview-box" id="previewArea">
+        Subí un archivo .dxf y seleccioná un material para cotizar
+      </div>
+
+      <h2>4. Presupuesto</h2>
+      <div class="summary-row">
+        <span>Metros de corte:</span>
+        <strong id="lblMetros">0.00 m</strong>
+      </div>
+      <div class="summary-row">
+        <span>Perforaciones (Piercings):</span>
+        <strong id="lblPiercings">0</strong>
+      </div>
+      <div class="summary-row">
+        <span>Costo Mecanizado / Corte:</span>
+        <span id="lblCostoCorte">$ 0.00</span>
+      </div>
+      <div class="summary-row">
+        <span>Puesta a punto (Setup):</span>
+        <span id="lblSetup">$ 0.00</span>
+      </div>
+
+      <div class="total-row">
+        <span>TOTAL:</span>
+        <span id="lblTotal" style="color: var(--accent);">$ 0.00</span>
+      </div>
+
+      <div style="text-align: center;">
+        <span class="badge-delivery">⏱️ Tiempo estimado: 48 - 72 hs hábiles</span>
+      </div>
+
+      <button class="btn-pay" id="btnPagar" disabled>Continuar al Pago</button>
+    </div>
+
+  </div>
+
+  <script>
+    // URL de tu API en Render
+    const API_URL = "https://andmax-cotizador-api.onrender.com";
+
+    const dxfInput = document.getElementById('dxfInput');
+    const dropzone = document.getElementById('dropzone');
+    const materialSelect = document.getElementById('materialSelect');
+    const btnPagar = document.getElementById('btnPagar');
+
+    dropzone.addEventListener('click', () => dxfInput.click());
+
+    dxfInput.addEventListener('change', procesarCotizacion);
+    materialSelect.addEventListener('change', procesarCotizacion);
+
+    async function procesarCotizacion() {
+      const file = dxfInput.files[0];
+      const material = materialSelect.value;
+
+      if (!file) return;
+
+      if (!material) {
+        document.getElementById('previewArea').innerText = "⚠️ Seleccioná un material para calcular el precio.";
+        return;
+      }
+
+      document.getElementById('previewArea').innerText = "⏳ Procesando archivo en el servidor...";
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('material', material);
+      formData.append('espesor', 3);
+      formData.append('incluye_material', 'true');
+
+      try {
+        const response = await fetch(`${API_URL}/cotizar`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) throw new Error("Error en la cotización");
+
+        const data = await response.json();
+
+        document.getElementById('lblMetros').innerText = `${data.metros_corte} m`;
+        document.getElementById('lblPiercings').innerText = data.piercings;
+        document.getElementById('lblCostoCorte').innerText = `$ ${data.costo_corte.toLocaleString('es-AR')}`;
+        document.getElementById('lblSetup').innerText = `$ ${data.costo_setup.toLocaleString('es-AR')}`;
+        document.getElementById('lblTotal').innerText = `$ ${data.total_estimado.toLocaleString('es-AR')}`;
+        
+        document.getElementById('previewArea').innerText = `✅ Archivo cargado: ${data.archivo}`;
+        btnPagar.disabled = false;
+
+      } catch (error) {
+        document.getElementById('previewArea').innerText = "❌ Error al cotizar el archivo. Intentalo de nuevo.";
+        console.error(error);
+      }
+    }
+  </script>
+</body>
+</html>
